@@ -15,9 +15,9 @@ class DBSchema {
     function __construct($manager) {
         $this->manager = $manager;
     }
-    
+
     function getDiff() {
-    
+
         $diffs = [];
 
         // Collation
@@ -34,12 +34,15 @@ class DBSchema {
         if ($sourceCharset !== $targetCharset) {
             $diffs[] = new SetDBCharset($dbName, $sourceCharset, $targetCharset);
         }
-        
+
         // Tables
         $tableSchema = new TableSchema($this->manager);
 
         $sourceTables = $this->manager->getTables('source');
         $targetTables = $this->manager->getTables('target');
+
+        $sourceTables = array_map([$this, 'stdClassToArray'], $sourceTables);
+        $targetTables = array_map([$this, 'stdClassToArray'], $targetTables);
 
         $addedTables = array_diff($sourceTables, $targetTables);
         foreach ($addedTables as $table) {
@@ -62,7 +65,11 @@ class DBSchema {
 
     protected function getDBVariable($connection, $var) {
         $result = $this->manager->getDB($connection)->select("show variables like '$var'");
-        return $result[0]['Value'];
+        return $result[0]->Value;
+    }
+
+    private function stdClassToArray($stdClassObject) {
+      return current((array)$stdClassObject);
     }
 
 }

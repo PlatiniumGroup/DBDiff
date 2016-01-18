@@ -9,7 +9,7 @@ use DBDiff\Templater;
 
 
 class DBDiff {
-    
+
     public function run() {
 
         // Increase memory limit
@@ -46,6 +46,7 @@ class DBDiff {
             Logger::success("Completed");
 
         } catch (\Exception $e) {
+
             if ($e instanceof BaseException) {
                 Logger::error($e->getMessage(), true);
             } else {

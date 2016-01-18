@@ -11,7 +11,7 @@ class SQLGenerator implements SQLGenInterface {
         $this->diffSorter = new DiffSorter;
         $this->diff = array_merge($diff['schema'], $diff['data']);
     }
-    
+
     public function getUp() {
         Logger::info("Now generating UP migration");
         $diff = $this->diffSorter->sort($this->diff, 'up');
