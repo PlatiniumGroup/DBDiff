@@ -11,7 +11,7 @@ class Templater {
         $this->up = $up;
         $this->down = $down;
     }
-    
+
     public function output() {
         $content = $this->getComments();
         $content .= $this->getContent();
@@ -45,8 +45,10 @@ class Templater {
     }
 
     private function getTemplate() {
-        if (file_exists($this->params->template))
-            return file_get_contents($this->params->template);
+        $template = @file_get_contents($this->params->template);
+        if ($template) {
+            return $template;
+        }
         return "#---------- UP ----------\n{{\$up}}\n#---------- DOWN ----------\n{{\$down}}";
     }
 }
